@@ -1,3 +1,4 @@
+erDiagram
   USER ||--o{ PROPERTY : hosts
   USER ||--o{ BOOKING  : makes
   PROPERTY ||--o{ BOOKING : has
@@ -13,7 +14,7 @@
     string last_name
     string email UK
     string password_hash
-    string phone_number?
+    string phone_number
     enum role "guest|host|admin"
     timestamp created_at
   }
