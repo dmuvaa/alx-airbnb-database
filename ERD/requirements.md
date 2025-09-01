@@ -1,4 +1,3 @@
-erDiagram
   USER ||--o{ PROPERTY : hosts
   USER ||--o{ BOOKING  : makes
   PROPERTY ||--o{ BOOKING : has
