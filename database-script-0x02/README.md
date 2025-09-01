@@ -12,4 +12,3 @@ This folder contains **sample data** to quickly populate the database for local 
 ## Load the data
 ```bash
 # from this directory
-psql -d airbnb_clone -f ./seed.sql
