@@ -65,4 +65,3 @@ erDiagram
     text message_body
     timestamp sent_at
   }
-
