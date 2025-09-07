@@ -15,3 +15,4 @@ Improve query performance on a large `bookings` table by partitioning **by `star
    WHERE b.start_date >= '2025-01-01'
      AND b.start_date <  '2025-02-01'
    ORDER BY b.start_date, b.id;
+

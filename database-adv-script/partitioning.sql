@@ -1,8 +1,4 @@
 -- partitioning.sql
--- Repository: alx-airbnb-database
--- Directory: database-adv-script
--- Purpose: Partition the large Bookings table by start_date, then test performance
--- Target DB: MySQL 8.0+
 
 -- ============================================================
 -- A) BASELINE: measure BEFORE partitioning (example range query)
