@@ -18,7 +18,9 @@ SELECT
 FROM bookings AS b
 JOIN users      AS u   ON u.id = b.user_id
 JOIN properties AS p   ON p.id = b.property_id
-LEFT JOIN payments AS pay ON pay.booking_id = b.id
+LEFT JOIN payments AS pay
+  ON pay.booking_id = b.id
+ AND pay.status IN ('captured', 'settled', 'succeeded')  -- <-- AND present
 ORDER BY b.booking_date DESC;
 
 -- Optional: initial plan
@@ -30,7 +32,9 @@ SELECT
 FROM bookings AS b
 JOIN users      AS u   ON u.id = b.user_id
 JOIN properties AS p   ON p.id = b.property_id
-LEFT JOIN payments AS pay ON pay.booking_id = b.id
+LEFT JOIN payments AS pay
+  ON pay.booking_id = b.id
+ AND pay.status IN ('captured', 'settled', 'succeeded')  -- <-- AND present
 ORDER BY b.booking_date DESC;
 
 
@@ -38,7 +42,6 @@ ORDER BY b.booking_date DESC;
    B) SUPPORTING INDEXES (apply once)
    ------------------------------------------------------------------------
    Apply these before running the refactored query for best performance.
-   If your MySQL version errors on IF NOT EXISTS, remove that clause.
    ======================================================================== */
 -- USERS
 ALTER TABLE users
@@ -70,7 +73,6 @@ ANALYZE TABLE users, bookings, properties, payments;
    - Many reports only need ONE payment per booking (e.g., latest successful).
    - Use a window function to pick the most recent successful payment per booking.
    - Reduces join cardinality (≤1 row per booking from payments).
-   - Select only needed columns; keep ORDER BY on indexed column.
    - Requires MySQL 8.0+ for window functions.
    ================================================================================== */
 WITH latest_payments AS (
@@ -105,7 +107,8 @@ SELECT
 FROM bookings AS b
 JOIN users      AS u  ON u.id = b.user_id
 JOIN properties AS p  ON p.id = b.property_id
-LEFT JOIN latest_payments AS lp ON lp.booking_id = b.id
+LEFT JOIN latest_payments AS lp
+  ON lp.booking_id = b.id
 ORDER BY b.booking_date DESC;
 
 -- Refactored plan (should show reduced rows on the payments side and index usage)
@@ -132,5 +135,6 @@ SELECT
 FROM bookings AS b
 JOIN users      AS u  ON u.id = b.user_id
 JOIN properties AS p  ON p.id = b.property_id
-LEFT JOIN latest_payments AS lp ON lp.booking_id = b.id
+LEFT JOIN latest_payments AS lp
+  ON lp.booking_id = b.id
 ORDER BY b.booking_date DESC;
